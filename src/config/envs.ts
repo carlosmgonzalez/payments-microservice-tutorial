@@ -7,6 +7,7 @@ interface Envs {
   STRIPE_SIGNING_SECRET: string;
   SUCCESS_URL: string;
   CANCEL_URL: string;
+  NAST_SERVERS: string[];
 }
 
 const envsSchema = joi
@@ -16,11 +17,15 @@ const envsSchema = joi
     STRIPE_SIGNING_SECRET: joi.string().required(),
     SUCCESS_URL: joi.string().required(),
     CANCEL_URL: joi.string().required(),
+    NAST_SERVERS: joi.array().items(joi.string()).required(),
   })
   .unknown();
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const { error, value } = envsSchema.validate(process.env);
+const { error, value } = envsSchema.validate({
+  ...process.env,
+  NAST_SERVERS: process.env.NAST_SERVERS!.split(','),
+});
 
 if (error) throw new Error(`Config validation error: ${error.message}`);
 
@@ -30,6 +35,7 @@ const {
   STRIPE_SIGNING_SECRET,
   SUCCESS_URL,
   CANCEL_URL,
+  NAST_SERVERS,
 } = value as Envs;
 
 export const envs = {
@@ -38,4 +44,5 @@ export const envs = {
   stripeSigningSecret: STRIPE_SIGNING_SECRET,
   successUrl: SUCCESS_URL,
   cancelUrl: CANCEL_URL,
+  nastServers: NAST_SERVERS,
 };
