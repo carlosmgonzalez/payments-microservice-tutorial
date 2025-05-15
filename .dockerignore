@@ -1,7 +1,7 @@
 # Archivos de construcción y dependencias:
 node_modules/
 dist/
-build/
+# build/
 
 # Archivos de desarrollo y configuración
 # .git/
